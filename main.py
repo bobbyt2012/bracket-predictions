@@ -5,7 +5,7 @@ from keys import openai_key
 openai_key = openai_key
 client = OpenAI(api_key = openai_key)
 
-def gpt_4_chat_completion(messages:list, temp:float = 1, pres:float = 0, freq:float = 0):
+def gpt_4_chat_completion(messages:list, temp:float = .9, pres:float = 0, freq:float = 0):
     """Wrapper for chat completions
     
     Parameters:
