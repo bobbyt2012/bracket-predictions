@@ -29,7 +29,6 @@ df = pd.read_excel(r"./bracket-predictions/NCAA_Games.xlsx")
 teams_list = list(df.Team)
 team_pairs = list(zip(teams_list[::2], teams_list[1::2]))
 
-
 i = 1
 
 while len(team_pairs) > 0:
@@ -62,3 +61,14 @@ while len(team_pairs) > 0:
         print("Pairs:", len_pairs)
         print("Winners:", len(winners))
         break
+
+df1 = pd.read_excel("Winners_1.xlsx")
+df2 = pd.read_excel("Winners_2.xlsx")
+df3 = pd.read_excel("Winners_3.xlsx")
+df4 = pd.read_excel("Winners_4.xlsx")
+df5 = pd.read_excel("Winners_5.xlsx")
+df6 = pd.read_excel("Winners_6.xlsx")
+
+all_winners = pd.concat([df1,df2,df3,df4,df5,df6], axis =1)
+
+all_winners.to_excel("AllWinners.xlsx", index = False)
