@@ -32,7 +32,7 @@ team_pairs = list(zip(teams_list[::2], teams_list[1::2]))
 
 i = 1
 
-while len(team_pairs) > 1:
+while len(team_pairs) > 0:
     len_pairs = len(team_pairs)
     winners = []
     for x in team_pairs:
