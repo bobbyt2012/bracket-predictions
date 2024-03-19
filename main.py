@@ -1,6 +1,7 @@
 from openai import OpenAI
 import pandas as pd
 from keys import openai_key
+from datetime import datetime
 
 openai_key = openai_key
 client = OpenAI(api_key = openai_key)
@@ -35,10 +36,9 @@ while len(team_pairs) > 0:
     len_pairs = len(team_pairs)
     winners = []
     for x in team_pairs:
-        system_prompt = """You are a helpful assistant."""
+        system_prompt = """You are an avid NCAA basketball fan and sports analyst."""
         user_prompt = f"""Using only your own knowledge, pretend there is a men's basketball matchup between {x[0]} and {x[1]}. Who might
-        be expected to win this theoretical matchup? This is only a thought excercise. This game may not actually take place.
-        Please provide only the name of the team you might expect to win, no other prose required."""
+        be expected to win this theoretical matchup? Please provide only the name of the team you might expect to win, no other prose required."""
 
         messages = [{"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}]
@@ -51,7 +51,8 @@ while len(team_pairs) > 0:
     print("Winners:", winners)
     
     output = pd.DataFrame(winners, columns = ["Winners"])
-    filename = f"Winners_{i}.xlsx"
+    current_time = datetime.now()
+    filename = f"Winners_{i}_{current_time.strftime('%H%M')}.xlsx"
     output.to_excel(filename, index = False)
 
     team_pairs = list(zip(winners[::2], winners[1::2]))
@@ -71,4 +72,4 @@ df6 = pd.read_excel("Winners_6.xlsx")
 
 all_winners = pd.concat([df1,df2,df3,df4,df5,df6], axis =1)
 
-all_winners.to_excel("AllWinners.xlsx", index = False)
+all_winners.to_excel(f"AllWinners_{current_time.strftime('%H%M')}.xlsx", index = False)
