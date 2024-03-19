@@ -25,7 +25,7 @@ def gpt_4_chat_completion(messages:list, temp:float = 1, pres:float = 0, freq:fl
     return response.choices[0].message.content
 
 
-df = pd.read_excel("NCAA_Games.xlsx")
+df = pd.read_excel(r"./bracket-predictions/NCAA_Games.xlsx")
 teams_list = list(df.Team)
 team_pairs = list(zip(teams_list[::2], teams_list[1::2]))
 
@@ -33,8 +33,8 @@ team_pairs = list(zip(teams_list[::2], teams_list[1::2]))
 i = 1
 
 while len(team_pairs) > 1:
+    len_pairs = len(team_pairs)
     winners = []
-
     for x in team_pairs:
         system_prompt = """You are a helpful assistant."""
         user_prompt = f"""Using only your own knowledge, pretend there is a men's basketball matchup between {x[0]} and {x[1]}. Who might
@@ -48,9 +48,17 @@ while len(team_pairs) > 1:
 
         winners.append(response)
 
+
     print("Winners:", winners)
+    
     output = pd.DataFrame(winners, columns = ["Winners"])
     filename = f"Winners_{i}.xlsx"
     output.to_excel(filename, index = False)
+
     team_pairs = list(zip(winners[::2], winners[1::2]))
     i += 1
+
+    if len_pairs != len(winners):
+        print("Pairs:", len_pairs)
+        print("Winners:", len(winners))
+        break
