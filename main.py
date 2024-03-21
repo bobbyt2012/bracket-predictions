@@ -30,14 +30,15 @@ df = pd.read_excel(r"./bracket-predictions/NCAA_Games.xlsx")
 teams_list = list(df.Team)
 team_pairs = list(zip(teams_list[::2], teams_list[1::2]))
 
-i = 1
+current_time = datetime.now()
 
+i = 1
 while len(team_pairs) > 0:
     len_pairs = len(team_pairs)
     winners = []
     for x in team_pairs:
         system_prompt = """You are an avid NCAA basketball fan and sports analyst."""
-        user_prompt = f"""Using only your own knowledge, pretend there is a men's basketball matchup between {x[0]} and {x[1]}. Who might
+        user_prompt = f"""Using your own knowledge, pretend there is a men's basketball matchup between {x[0]} and {x[1]}. Who might
         be expected to win this theoretical matchup? Please provide only the name of the team you might expect to win, no other prose required."""
 
         messages = [{"role": "system", "content": system_prompt},
@@ -47,12 +48,10 @@ while len(team_pairs) > 0:
 
         winners.append(response)
 
-
     print("Winners:", winners)
     
     output = pd.DataFrame(winners, columns = ["Winners"])
-    current_time = datetime.now()
-    filename = f"Winners_{i}_{current_time.strftime('%H%M')}.xlsx"
+    filename = f"Winners_{current_time.strftime('%H%M')}_{i}.xlsx"
     output.to_excel(filename, index = False)
 
     team_pairs = list(zip(winners[::2], winners[1::2]))
@@ -63,13 +62,12 @@ while len(team_pairs) > 0:
         print("Winners:", len(winners))
         break
 
-df1 = pd.read_excel("Winners_1.xlsx")
-df2 = pd.read_excel("Winners_2.xlsx")
-df3 = pd.read_excel("Winners_3.xlsx")
-df4 = pd.read_excel("Winners_4.xlsx")
-df5 = pd.read_excel("Winners_5.xlsx")
-df6 = pd.read_excel("Winners_6.xlsx")
+df1 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_1.xlsx")
+df2 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_2.xlsx")
+df3 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_3.xlsx")
+df4 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_4.xlsx")
+df5 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_5.xlsx")
+df6 = pd.read_excel(f"Winners_{current_time.strftime('%H%M')}_6.xlsx")
 
 all_winners = pd.concat([df1,df2,df3,df4,df5,df6], axis =1)
-
 all_winners.to_excel(f"AllWinners_{current_time.strftime('%H%M')}.xlsx", index = False)
